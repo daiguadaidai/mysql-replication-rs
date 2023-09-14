@@ -1,0 +1,162 @@
+pub const MIN_PPOTOCOL_VERSION: u8 = 10;
+pub const MAX_PAYLOAD_LEN: isize = (1_isize << 24) - 1;
+pub const TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
+
+pub const OK_HEADER: u8 = 0x00;
+pub const MORE_DATE_HEADER: u8 = 0x01;
+pub const ERR_HEADER: u8 = 0xff;
+pub const EOF_HEADER: u8 = 0xfe;
+pub const LOCAL_IN_FILE_HEADER: u8 = 0xfb;
+
+pub const CACHE_SHA2_FAST_AUTH: u8 = 0x03;
+pub const CACHE_SHA2_FULL_AUTH: u8 = 0x04;
+
+pub const AUTH_MYSQL_OLD_PASSWORD: &str = "mysql_old_password";
+pub const AUTH_NATIVE_PASSWORD: &str = "mysql_native_password";
+pub const AUTH_CLEAR_PASSWORD: &str = "mysql_clear_password";
+pub const AUTH_CACHING_SHA2_PASSWORD: &str = "caching_sha2_password";
+pub const AUTH_SHA256_PASSWORD: &str = "sha256_password";
+
+pub const SERVER_STATUS_IN_TRANS: u16 = 0x0001;
+pub const SERVER_STATUS_AUTOCOMMIT: u16 = 0x0002;
+pub const SERVER_MORE_RESULTS_EXISTS: u16 = 0x0008;
+pub const SERVER_STATUS_NO_GOOD_INDEX_USED: u16 = 0x0010;
+pub const SERVER_STATUS_NO_INDEX_USED: u16 = 0x0020;
+pub const SERVER_STATUS_CURSOR_EXISTS: u16 = 0x0040;
+pub const SERVER_STATUS_LAST_ROW_SEND: u16 = 0x0080;
+pub const SERVER_STATUS_DB_DROPPED: u16 = 0x0100;
+pub const SERVER_STATUS_NO_BACKSLASH_ESCAPED: u16 = 0x0200;
+pub const SERVER_STATUS_METADATA_CHANGED: u16 = 0x0400;
+pub const SERVER_QUERY_WAS_SLOW: u16 = 0x0800;
+pub const SERVER_PS_OUT_PARAMS: u16 = 0x1000;
+
+pub const COM_SLEEP: u8 = 0;
+pub const COM_QUIT: u8 = 1;
+pub const COM_INIT_DB: u8 = 2;
+pub const COM_QUERY: u8 = 3;
+pub const COM_FIELD_LIST: u8 = 4;
+pub const COM_CREATE_DB: u8 = 5;
+pub const COM_DROP_DB: u8 = 6;
+pub const COM_REFRESH: u8 = 7;
+pub const COM_SHUTDOWN: u8 = 8;
+pub const COM_STATISTICS: u8 = 9;
+pub const COM_PROCESS_INFO: u8 = 10;
+pub const COM_CONNECT: u8 = 11;
+pub const COM_PROCESS_KILL: u8 = 12;
+pub const COM_DEBUG: u8 = 13;
+pub const COM_PING: u8 = 14;
+pub const COM_TIME: u8 = 15;
+pub const COM_DELAYED_INSERT: u8 = 16;
+pub const COM_CHANGE_USER: u8 = 17;
+pub const COM_BINLOG_DUMP: u8 = 18;
+pub const COM_TABLE_DUMP: u8 = 19;
+pub const COM_CONNECT_OUT: u8 = 20;
+pub const COM_REGISTER_SLAVE: u8 = 21;
+pub const COM_STMT_PREPARE: u8 = 22;
+pub const COM_STMT_EXECUTE: u8 = 23;
+pub const COM_STMT_SEND_LONG_DATA: u8 = 24;
+pub const COM_STMT_CLOSE: u8 = 25;
+pub const COM_STMT_RESET: u8 = 26;
+pub const COM_SET_OPTION: u8 = 27;
+pub const COM_STMT_FETCH: u8 = 28;
+pub const COM_DAEMON: u8 = 29;
+pub const COM_BINLOG_DUMP_GTID: u8 = 30;
+pub const COM_RESET_CONNECTION: u8 = 31;
+
+// https://dev.mysql.com/doc/dev/mysql-server/latest/group__group__cs__capabilities__flags.html
+pub const CLIENT_LONG_PASSWORD: u32 = 1;
+pub const CLIENT_FOUND_ROWS: u32 = 1 << 1;
+pub const CLIENT_LONG_FLAG: u32 = 1 << 2;
+pub const CLIENT_CONNECT_WITH_DB: u32 = 1 << 3;
+pub const CLIENT_NO_SCHEMA: u32 = 1 << 4;
+pub const CLIENT_COMPRESS: u32 = 1 << 5;
+pub const CLIENT_ODBC: u32 = 1 << 6;
+pub const CLIENT_LOCAL_FILES: u32 = 1 << 7;
+pub const CLIENT_IGNORE_SPACE: u32 = 1 << 8;
+pub const CLIENT_PROTOCOL_41: u32 = 1 << 9;
+pub const CLIENT_INTERACTIVE: u32 = 1 << 10;
+pub const CLIENT_SSL: u32 = 1 << 11;
+pub const CLIENT_IGNORE_SIGPIPE: u32 = 1 << 12;
+pub const CLIENT_TRANSACTIONS: u32 = 1 << 13;
+pub const CLIENT_RESERVED: u32 = 1 << 14;
+pub const CLIENT_SECURE_CONNECTION: u32 = 1 << 15;
+pub const CLIENT_MULTI_STATEMENTS: u32 = 1 << 16;
+pub const CLIENT_MULTI_RESULTS: u32 = 1 << 17;
+pub const CLIENT_PS_MULTI_RESULTS: u32 = 1 << 18;
+pub const CLIENT_PLUGIN_AUTH: u32 = 1 << 19;
+pub const CLIENT_CONNECT_ATTRS: u32 = 1 << 20;
+pub const CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA: u32 = 1 << 21;
+pub const CLIENT_CAN_HANDLE_EXPIRED_PASSWORDS: u32 = 1 << 22;
+pub const CLIENT_SESSION_TRACK: u32 = 1 << 23;
+pub const CLIENT_DEPRECATE_EOF: u32 = 1 << 24;
+pub const CLIENT_OPTIONAL_RESULTSET_METADATA: u32 = 1 << 25;
+pub const CLIENT_ZSTD_COMPRESSION_ALGORITHM: u32 = 1 << 26;
+pub const CLIENT_QUERY_ATTRIBUTES: u32 = 1 << 27;
+pub const MULTI_FACTOR_AUTHENTICATION: u32 = 1 << 28;
+pub const CLIENT_CAPABILITY_EXTENSION: u32 = 1 << 29;
+pub const CLIENT_SSL_VERIFY_SERVER_CERT: u32 = 1 << 30;
+pub const CLIENT_REMEMBER_OPTIONS: u32 = 1 << 31;
+
+pub const MYSQL_TYPE_DECIMAL: u8 = 0;
+pub const MYSQL_TYPE_TINY: u8 = 1;
+pub const MYSQL_TYPE_SHORT: u8 = 2;
+pub const MYSQL_TYPE_LONG: u8 = 3;
+pub const MYSQL_TYPE_FLOAT: u8 = 4;
+pub const MYSQL_TYPE_DOUBLE: u8 = 5;
+pub const MYSQL_TYPE_NULL: u8 = 6;
+pub const MYSQL_TYPE_TIMESTAMP: u8 = 7;
+pub const MYSQL_TYPE_LONGLONG: u8 = 8;
+pub const MYSQL_TYPE_INT24: u8 = 9;
+pub const MYSQL_TYPE_DATE: u8 = 10;
+pub const MYSQL_TYPE_TIME: u8 = 11;
+pub const MYSQL_TYPE_DATETIME: u8 = 12;
+pub const MYSQL_TYPE_YEAR: u8 = 13;
+pub const MYSQL_TYPE_NEWDATE: u8 = 14;
+pub const MYSQL_TYPE_VARCHAR: u8 = 15;
+pub const MYSQL_TYPE_BIT: u8 = 16;
+pub const MYSQL_TYPE_TIMESTAMP2: u8 = 17;
+pub const MYSQL_TYPE_DATETIME2: u8 = 18;
+pub const MYSQL_TYPE_TIME2: u8 = 19;
+
+pub const MYSQL_TYPE_JSON: u8 = 0 + 0xf5;
+pub const MYSQL_TYPE_NEWDECIMAL: u8 = 1 + 0xf5;
+pub const MYSQL_TYPE_ENUM: u8 = 2 + 0xf5;
+pub const MYSQL_TYPE_SET: u8 = 3 + 0xf5;
+pub const MYSQL_TYPE_TINY_BLOB: u8 = 4 + 0xf5;
+pub const MYSQL_TYPE_MEDIUM_BLOB: u8 = 5 + 0xf5;
+pub const MYSQL_TYPE_LONG_BLOB: u8 = 6 + 0xf5;
+pub const MYSQL_TYPE_BLOB: u8 = 7 + 0xf5;
+pub const MYSQL_TYPE_VAR_STRING: u8 = 8 + 0xf5;
+pub const MYSQL_TYPE_STRING: u8 = 9 + 0xf5;
+pub const MYSQL_TYPE_GEOMETRY: u8 = 10 + 0xf5;
+
+pub const NOT_NULL_FLAG: isize = 1;
+pub const PRI_KEY_FLAG: isize = 2;
+pub const UNIQUE_KEY_FLAG: isize = 4;
+pub const BLOB_FLAG: isize = 16;
+pub const UNSIGNED_FLAG: isize = 32;
+pub const ZEROFILL_FLAG: isize = 64;
+pub const BINARY_FLAG: isize = 128;
+pub const ENUM_FLAG: isize = 256;
+pub const AUTO_INCREMENT_FLAG: isize = 512;
+pub const TIMESTAMP_FLAG: isize = 1024;
+pub const SET_FLAG: isize = 2048;
+pub const NUM_FLAG: isize = 32768;
+pub const PART_KEY_FLAG: isize = 16384;
+pub const GROUP_FLAG: isize = 32768;
+pub const UNIQUE_FLAG: isize = 65536;
+
+pub const DEFAULT_CHARSET: &str = "utf8";
+pub const DEFAULT_COLLATION_ID: u8 = 33;
+pub const DEFAULT_COLLATION_NAME: &str = "utf8_general_ci";
+
+// Like vitess, use flavor for different MySQL versions,
+pub const MYSQL_FLAVOR: &str = "mysql";
+pub const MARIA_DB_FLAVOR: &str = "mariadb";
+
+pub const MYSQL_OPTION_MULTI_STATEMENTS_ON: u8 = 0;
+pub const MYSQL_OPTION_MULTI_STATEMENTS_OFF: u8 = 1;
+
+pub const MYSQL_COMPRESS_NONE: u8 = 0;
+pub const MYSQL_COMPRESS_ZLIB: u8 = 1;
+pub const MYSQL_COMPRESS_ZSTD: u8 = 2;
