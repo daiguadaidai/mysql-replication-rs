@@ -9,6 +9,7 @@ mod mariadb_gtid_test;
 pub mod mysql_gtid;
 mod mysql_test;
 pub mod parse_binary;
+pub mod position;
 pub mod state;
 pub mod util;
 
@@ -21,5 +22,6 @@ pub use gtid_set_enum::*;
 pub use mariadb_gtid::*;
 pub use mysql_gtid::*;
 pub use parse_binary::*;
+pub use position::*;
 pub use state::*;
 pub use util::*;

@@ -1,16 +1,17 @@
 #[cfg(test)]
 mod tests {
     use crate::error::ReplicationError;
-    use crate::replication::parser::BinlogParse;
+    use crate::replication::parser::BinlogParser;
     use crate::replication::{
         DecodeFieldData, DecodeJson, EnumRowImageType, EventType, FormatDescriptionEvent,
         RowsEvent, TableMapEvent,
     };
     use std::io::BufReader;
+    use std::rc::Rc;
 
     #[test]
     fn test_index_out_of_range() -> Result<(), ReplicationError> {
-        let mut parser = BinlogParse::new();
+        let mut parser = BinlogParser::new();
         parser.format = Some(FormatDescriptionEvent {
             version: 0x4,
             server_version: vec![
@@ -247,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_parse_event() -> Result<(), ReplicationError> {
-        let mut parser = BinlogParse::new();
+        let mut parser = BinlogParser::new();
         parser.format = Some(FormatDescriptionEvent {
             version: 0x4,
             server_version: vec![
@@ -374,8 +375,8 @@ mod tests {
             },
         ];
 
-        let mut parser = BinlogParse::new();
-        parser.set_rows_event_decode_func(Some(Box::new(|re, bs| {
+        let mut parser = BinlogParser::new();
+        parser.set_rows_event_decode_func(Some(Rc::new(|re, bs| {
             let _ = re.decode_header(bs)?;
 
             Ok(())

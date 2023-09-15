@@ -5,7 +5,7 @@
 use crate::error::ReplicationError;
 use crate::mysql;
 use crate::mysql::fixed_length_int;
-use crate::replication::parser::BinlogParse;
+use crate::replication::parser::BinlogParser;
 use crate::replication::{BinlogEvent, Event, FormatDescriptionEvent, BINLOG_CHECKSUM_ALG_OFF};
 use byteorder::{ByteOrder, LittleEndian};
 use std::io::{Read, Write};
@@ -129,7 +129,7 @@ impl TransactionPayloadEvent {
         // to work on them. We can't use e.parser directly as we need to disable checksums
         // but we still need the initialization from the FormatDescriptionEvent. We can't
         // modify e.parser as it is used elsewhere.
-        let mut parser = BinlogParse::new();
+        let mut parser = BinlogParser::new();
         let mut format = self.format.clone();
         format.as_mut().unwrap().check_sum_algorithm = BINLOG_CHECKSUM_ALG_OFF;
         parser.format = format;

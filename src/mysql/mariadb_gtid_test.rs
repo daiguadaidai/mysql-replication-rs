@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::error::ReplicationError;
-    use crate::init_log;
+    use crate::loggerop;
     use crate::mysql::{GTIDSet, MariadbGTID, MariadbGTIDSet};
     use std::collections::HashMap;
 
@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn test_mariadb_forward() -> Result<(), ReplicationError> {
-        init_log()?;
+        loggerop::init_log_once()?;
 
         struct Case {
             pub current_gtid_str: String,

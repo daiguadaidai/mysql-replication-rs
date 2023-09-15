@@ -1,6 +1,6 @@
 use crate::error::{EventError, ReplicationError};
 use crate::replication::{
-    BeginLoadQueryEvent, BinlogEvent, Event, EventEnum, EventHeader, EventType,
+    common, BeginLoadQueryEvent, BinlogEvent, Event, EventEnum, EventHeader, EventType,
     ExecuteLoadQueryEvent, FormatDescriptionEvent, GTIDEvent, GenericEvent, IntVarEvent,
     MariadbAnnotateRowsEvent, MariadbBinlogCheckPointEvent, MariadbGTIDEvent, MariadbGTIDListEvent,
     PreviousGTIDsEvent, QueryEvent, RotateEvent, RowsEvent, RowsQueryEvent, TableMapEvent,
@@ -19,7 +19,7 @@ use std::sync::atomic::Ordering;
 pub const ERR_CHECKSUM_MISMATCH: &str = "binlog checksum mismatch, data may be corrupted";
 
 #[derive(Default)]
-pub struct BinlogParse {
+pub struct BinlogParser {
     // "mysql" or "mariadb", if not set, use "mysql" by default
     pub flavor: String,
     pub format: Option<FormatDescriptionEvent>,
@@ -33,13 +33,12 @@ pub struct BinlogParse {
     pub use_decimal: bool,
     pub ignore_json_decode_err: bool,
     pub verify_checksum: bool,
-    pub rows_event_decode_func:
-        Option<Box<dyn Fn(&mut RowsEvent, &[u8]) -> Result<(), ReplicationError>>>,
+    pub rows_event_decode_func: Option<common::RowsEventDecodeFunc>,
 }
 
-impl BinlogParse {
-    pub fn new() -> BinlogParse {
-        BinlogParse::default()
+impl BinlogParser {
+    pub fn new() -> BinlogParser {
+        BinlogParser::default()
     }
 
     pub fn stop(&mut self) {
@@ -279,9 +278,7 @@ impl BinlogParse {
 
     pub fn set_rows_event_decode_func(
         &mut self,
-        rows_event_decode_func: Option<
-            Box<dyn Fn(&mut RowsEvent, &[u8]) -> Result<(), ReplicationError>>,
-        >,
+        rows_event_decode_func: Option<common::RowsEventDecodeFunc>,
     ) {
         self.rows_event_decode_func = rows_event_decode_func;
     }

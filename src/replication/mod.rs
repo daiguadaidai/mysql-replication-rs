@@ -1,5 +1,7 @@
 pub mod binlog_event;
 pub mod binlogstreamer;
+pub mod binlogsyncer;
+pub mod common;
 pub mod consts;
 pub mod decode_helper;
 pub mod event;
@@ -18,6 +20,7 @@ pub mod transaction_payload_event;
 
 pub use binlog_event::*;
 pub use binlogstreamer::*;
+pub use binlogsyncer::*;
 pub use consts::*;
 pub use event::*;
 pub use event_enum::*;
