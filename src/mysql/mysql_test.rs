@@ -1,9 +1,8 @@
 #[cfg(test)]
 mod tests {
-    use crate::error::ReplicationError;
+    use crate::error::{MyError, ReplicationError};
     use crate::mysql::{
-        length_encoded_int, GTIDSet, Interval, IntervalSlice, MyError, MysqlGTIDSet, ParseBinary,
-        UUIDSet,
+        length_encoded_int, GTIDSet, Interval, IntervalSlice, MysqlGTIDSet, ParseBinary, UUIDSet,
     };
     use uuid::Uuid;
 

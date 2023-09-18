@@ -5,6 +5,7 @@ extern crate test;
 
 use crate::error::ReplicationError;
 
+pub mod client;
 pub mod error;
 pub mod loggerop;
 pub mod mysql;

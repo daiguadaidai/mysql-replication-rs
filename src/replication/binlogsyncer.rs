@@ -22,6 +22,7 @@ impl std::fmt::Debug for BinlogSyncerConfig {
             .field("charset", &self.charset)
             .field("semi_sync_enabled", &self.semi_sync_enabled)
             .field("raw_mode_enabled", &self.raw_mode_enabled)
+            .field("tls_config", &self.tls_config)
             .field("parse_time", &self.parse_time)
             .field("timestamp_string_location", &self.timestamp_string_location)
             .field("use_decimal", &self.use_decimal)
@@ -70,8 +71,8 @@ pub struct BinlogSyncerConfig {
     pub semi_sync_enabled: bool,
     // RawModeEnabled is for not parsing binlog event.
     pub raw_mode_enabled: bool,
-    // // If not nil, use the provided tls.Config to connect to the database using TLS/SSL.
-    // TLSConfig *tls.Config
+    // If not nil, use the provided tls.Config to connect to the database using TLS/SSL.
+    pub tls_config: rustls::ClientConfig,
 
     // Use replication.Time structure for timestamp and datetime.
     // We will use Local location for timestamp and UTC location for datatime.

@@ -6,7 +6,6 @@ use rand::{Rng, SeedableRng};
 use ring::digest;
 use rsa::rand_core::OsRng;
 use rsa::Oaep;
-use semver::Version;
 use std::any::Any;
 use std::cmp::Ordering;
 use std::collections::HashMap;
@@ -306,7 +305,7 @@ pub fn uint32_to_bytes(n: u32) -> Vec<u8> {
 }
 
 #[allow(arithmetic_overflow)]
-pub fn uint64_to_bytes(n: u32) -> Vec<u8> {
+pub fn uint64_to_bytes(n: u64) -> Vec<u8> {
     vec![
         n as u8,
         (n >> 8) as u8,
@@ -475,15 +474,15 @@ pub fn error_equal(err1: Box<dyn std::error::Error>, err2: Box<dyn std::error::E
     }
 }
 
-pub fn mompare_server_versions(a: &str, b: &str) -> io::Result<Ordering> {
-    let a_version = Version::parse(a).map_err(|e| {
+pub fn compare_server_versions(a: &str, b: &str) -> io::Result<Ordering> {
+    let a_version = lenient_semver::parse(a).map_err(|e| {
         io::Error::new(
             io::ErrorKind::Other,
             format!("cannot parse {} as semver: {}", a, e.to_string()),
         )
     })?;
 
-    let b_version = Version::parse(b).map_err(|e| {
+    let b_version = lenient_semver::parse(b).map_err(|e| {
         io::Error::new(
             io::ErrorKind::Other,
             format!("cannot parse {:?} as semver: {}", b, e.to_string()),
@@ -498,6 +497,11 @@ mod tests {
     use crate::error::ReplicationError;
     use std::any::Any;
     use std::io;
+
+    #[test]
+    fn d() {
+        println!("{}", (u64::MAX - 100) as i64);
+    }
 
     #[test]
     fn c() {

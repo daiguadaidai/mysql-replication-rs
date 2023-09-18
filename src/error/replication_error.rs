@@ -1,7 +1,7 @@
 use std::char::TryFromCharError;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
-use crate::error::EventError;
+use crate::error::{EventError, MysqlError};
 use hex::FromHexError;
 use std::io::Error as IoError;
 use std::num::ParseIntError;
@@ -22,6 +22,7 @@ pub enum ReplicationError {
     SerdeJsonError(serde_json::Error),
     AsyncChannelRecvError(async_channel::RecvError),
     EventError(EventError),
+    MysqlError(MysqlError),
 }
 
 impl std::error::Error for ReplicationError {}
@@ -50,6 +51,7 @@ impl Display for ReplicationError {
                 write!(f, "<NoError>")
             }
             ReplicationError::AsyncChannelRecvError(ref e) => e.fmt(f),
+            ReplicationError::MysqlError(ref e) => e.fmt(f),
         }
     }
 }
@@ -128,5 +130,12 @@ impl From<EventError> for ReplicationError {
 impl From<async_channel::RecvError> for ReplicationError {
     fn from(error: async_channel::RecvError) -> ReplicationError {
         ReplicationError::AsyncChannelRecvError(error)
+    }
+}
+
+//将MysqlError转为 ReplicationError
+impl From<MysqlError> for ReplicationError {
+    fn from(error: MysqlError) -> ReplicationError {
+        ReplicationError::MysqlError(error)
     }
 }

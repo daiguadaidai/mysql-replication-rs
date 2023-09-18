@@ -1,7 +1,7 @@
 pub mod consts;
 pub mod errcode;
 pub mod errname;
-pub mod error;
+pub mod field;
 pub mod gtid;
 pub mod gtid_set_enum;
 pub mod mariadb_gtid;
@@ -12,11 +12,12 @@ pub mod parse_binary;
 pub mod position;
 pub mod state;
 pub mod util;
+mod util_test;
 
 pub use consts::*;
 pub use errcode::*;
 pub use errname::*;
-pub use error::*;
+pub use field::*;
 pub use gtid::*;
 pub use gtid_set_enum::*;
 pub use mariadb_gtid::*;
