@@ -42,7 +42,7 @@ impl Interval {
                     interval.stop = interval.start + 1;
                     Ok(())
                 }
-                Err(e) => Err(ReplicationError::ParseError(e)),
+                Err(e) => Err(ReplicationError::ParseIntError(e)),
             },
             2 => match p[0].parse::<i64>() {
                 Ok(start) => {
@@ -52,13 +52,13 @@ impl Interval {
                             interval.stop = stop;
                             Ok(())
                         }
-                        Err(e) => Err(ReplicationError::ParseError(e)),
+                        Err(e) => Err(ReplicationError::ParseIntError(e)),
                     };
                     interval.stop += 1;
 
                     rs
                 }
-                Err(e) => Err(ReplicationError::ParseError(e)),
+                Err(e) => Err(ReplicationError::ParseIntError(e)),
             },
 
             _ => Err(ReplicationError::NormalError(String::from(
@@ -670,7 +670,7 @@ mod tests {
                     interval.stop = interval.start + 1;
                     Ok(())
                 }
-                Err(e) => Err(ReplicationError::ParseError(e)),
+                Err(e) => Err(ReplicationError::ParseIntError(e)),
             },
             2 => match p[0].parse::<i64>() {
                 Ok(start) => {
@@ -680,13 +680,13 @@ mod tests {
                             interval.stop = stop;
                             Ok(())
                         }
-                        Err(e) => Err(ReplicationError::ParseError(e)),
+                        Err(e) => Err(ReplicationError::ParseIntError(e)),
                     };
                     interval.stop += 1;
 
                     rs
                 }
-                Err(e) => Err(ReplicationError::ParseError(e)),
+                Err(e) => Err(ReplicationError::ParseIntError(e)),
             },
 
             _ => Err(ReplicationError::NormalError(String::from(

@@ -94,7 +94,7 @@ impl Field {
             //length of default value lenenc-int
             let (default_value_length, _, n) = length_encoded_int(&self.data[pos..]);
             self.default_value_length = default_value_length;
-            pos += n as usize;
+            pos += n;
 
             let default_value_start = pos + self.default_value_length as usize;
             if default_value_start > self.data.len() {
@@ -145,20 +145,29 @@ impl Field {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum FieldValueType {
-    Null = 0,
+    None = 0,
     Unsigned = 1,
     Signed = 2,
     Float = 3,
     String = 4,
 }
 
+impl Default for FieldValueType {
+    fn default() -> Self {
+        FieldValueType::None
+    }
+}
+
+#[derive(Debug, Clone, Default)]
 pub struct FieldValue {
     pub typ: FieldValueType,
     pub value: u64, // Also for int64 and float64
     pub string: Vec<u8>,
 }
 
+#[derive(Debug, Clone)]
 pub enum FieldValueEnum {
     None,
     U64(u64),
@@ -177,7 +186,7 @@ impl FieldValue {
     }
 
     pub fn as_float64(&self) -> FieldValueEnum {
-        FieldValueEnum::F64(self.value as f64)
+        FieldValueEnum::F64(f64::from_bits(self.value))
     }
 
     pub fn as_string(&self) -> FieldValueEnum {
@@ -186,7 +195,7 @@ impl FieldValue {
 
     pub fn value(&self) -> FieldValueEnum {
         match self.typ {
-            FieldValueType::Null => FieldValueEnum::None,
+            FieldValueType::None => FieldValueEnum::None,
             FieldValueType::Unsigned => self.as_uint64(),
             FieldValueType::Signed => self.as_int64(),
             FieldValueType::Float => self.as_float64(),

@@ -478,7 +478,7 @@ impl TableMapEvent {
         let mut p = 0_usize;
         while p < v.len() {
             let (i, _, n) = mysql::length_encoded_int(&v[p..]);
-            p += n as usize;
+            p += n;
             ret.push(i);
         }
 
@@ -522,11 +522,11 @@ impl TableMapEvent {
         let mut p = 0_usize;
         while p < v.len() {
             let (n_val, _, n) = mysql::length_encoded_int(&v[p..]);
-            p += n as usize;
+            p += n;
             let mut vals = Vec::<Vec<u8>>::with_capacity(n_val as usize);
             for _ in 0..n_val {
                 let (val, _, n) = mysql::length_encoded_string(&v[p..])?;
-                p += n as usize;
+                p += n;
                 vals.push(val);
             }
 
@@ -542,7 +542,7 @@ impl TableMapEvent {
             let (i, _, n) = mysql::length_encoded_int(&v[p..]);
             self.primary_key.push(i);
             self.primary_key_prefix.push(0);
-            p += n as usize;
+            p += n;
         }
 
         Ok(())
@@ -553,11 +553,11 @@ impl TableMapEvent {
         while p < v.len() {
             let (i, _, n) = mysql::length_encoded_int(&v[p..]);
             self.primary_key.push(i);
-            p += n as usize;
+            p += n;
 
             let (i, _, n) = mysql::length_encoded_int(&v[p..]);
             self.primary_key_prefix.push(i);
-            p += n as usize;
+            p += n;
         }
 
         Ok(())
@@ -1143,7 +1143,7 @@ impl RowsEvent {
         {
             // binlog_row_value_options
             let (binlog_row_value_options, _, n) = mysql::length_encoded_int(&data[pos..]);
-            pos += n as usize;
+            pos += n;
 
             let is_partial_json_update =
                 (EnumBinlogRowValueOptions::from(binlog_row_value_options as u8) as u8)
@@ -1526,7 +1526,7 @@ impl RowsEvent {
 
         let data = &data[1..];
         let (path_length, _, n) = mysql::length_encoded_int(data);
-        let data = &data[n as usize..];
+        let data = &data[n..];
 
         let path = &data[..path_length as usize];
         let data = &data[path_length as usize..];
@@ -1543,7 +1543,7 @@ impl RowsEvent {
         }
 
         let (value_length, _, n) = mysql::length_encoded_int(data);
-        let data = &data[n as usize..];
+        let data = &data[n..];
 
         let d = self
             ._decode_json_binary(&data[..value_length as usize])

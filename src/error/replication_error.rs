@@ -4,14 +4,14 @@ use std::fmt::{Display, Formatter, Result as FmtResult};
 use crate::error::{EventError, MysqlError};
 use hex::FromHexError;
 use std::io::Error as IoError;
-use std::num::ParseIntError;
 use uuid::Error as UuidError;
 
 #[derive(Debug)]
 pub enum ReplicationError {
     NoError,
     NormalError(String),
-    ParseError(ParseIntError),
+    ParseIntError(std::num::ParseIntError),
+    ParseFloatError(std::num::ParseFloatError),
     IoError(IoError),
     FromHexError(FromHexError),
     UuidError(UuidError),
@@ -37,7 +37,7 @@ impl Display for ReplicationError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         match *self {
             ReplicationError::NormalError(ref e) => e.fmt(f),
-            ReplicationError::ParseError(ref e) => e.fmt(f),
+            ReplicationError::ParseIntError(ref e) => e.fmt(f),
             ReplicationError::IoError(ref e) => e.fmt(f),
             ReplicationError::FromHexError(ref e) => e.fmt(f),
             ReplicationError::UuidError(ref e) => e.fmt(f),
@@ -52,6 +52,7 @@ impl Display for ReplicationError {
             }
             ReplicationError::AsyncChannelRecvError(ref e) => e.fmt(f),
             ReplicationError::MysqlError(ref e) => e.fmt(f),
+            ReplicationError::ParseFloatError(ref e) => e.fmt(f),
         }
     }
 }
@@ -64,9 +65,16 @@ impl From<IoError> for ReplicationError {
 }
 
 //将ParseIntError转为ReplicationError
-impl From<ParseIntError> for ReplicationError {
-    fn from(error: ParseIntError) -> ReplicationError {
-        ReplicationError::ParseError(error)
+impl From<std::num::ParseIntError> for ReplicationError {
+    fn from(error: std::num::ParseIntError) -> ReplicationError {
+        ReplicationError::ParseIntError(error)
+    }
+}
+
+//将ParseFloatError转为ReplicationError
+impl From<std::num::ParseFloatError> for ReplicationError {
+    fn from(error: std::num::ParseFloatError) -> ReplicationError {
+        ReplicationError::ParseFloatError(error)
     }
 }
 

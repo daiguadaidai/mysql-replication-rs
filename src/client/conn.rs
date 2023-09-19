@@ -1,4 +1,7 @@
+use crate::error::ReplicationError;
+use crate::mysql::FieldValue;
 use std::collections::HashMap;
+use std::rc::Rc;
 use tokio::net;
 
 pub struct Conn {
@@ -24,14 +27,12 @@ pub struct Conn {
 }
 
 // This function will be called for every row in resultset from ExecuteSelectStreaming.
-// pub type select_per_row_callback = Rc<Fn(Vec<>)>
-
-/*
-
-type SelectPerRowCallback func(row []FieldValue) error
+pub type SelectPerRowCallback = Rc<dyn Fn(Vec<FieldValue>) -> Result<(), ReplicationError>>;
 
 // This function will be called once per result from ExecuteSelectStreaming
-type SelectPerResultCallback func(result *Result) error
+// pub type SelectPerResultCallback func(result *Result) error
+/*
+
 
 // This function will be called once per result from ExecuteMultiple
 type ExecPerResultCallback func(result *Result, err error)

@@ -174,7 +174,7 @@ pub fn bfixed_length_int(buf: &[u8]) -> u64 {
     num
 }
 
-pub fn length_encoded_int(b: &[u8]) -> (u64, bool, isize) {
+pub fn length_encoded_int(b: &[u8]) -> (u64, bool, usize) {
     if b.len() == 0 {
         return (0, true, 0);
     }
@@ -250,18 +250,18 @@ pub fn put_length_encoded_int(n: u64) -> Vec<u8> {
 // LengthEncodedString returns the string read as a bytes slice, whether the value is NULL,
 // the number of bytes read and an error, in case the string is longer than
 // the input slice
-pub fn length_encoded_string(b: &[u8]) -> io::Result<(Vec<u8>, bool, isize)> {
+pub fn length_encoded_string(b: &[u8]) -> io::Result<(Vec<u8>, bool, usize)> {
     // Get length
     let (num, is_null, mut n) = length_encoded_int(b);
     if num < 1 {
         return Ok((vec![], is_null, n));
     }
 
-    n += num as isize;
+    n += num as usize;
 
     // Check data length
-    if b.len() >= n as usize {
-        let rs = b[(n - num as isize) as usize..n as usize].to_vec();
+    if b.len() >= n {
+        let rs = b[(n - num as usize)..n].to_vec();
 
         return Ok((rs, false, n));
     }
@@ -273,14 +273,14 @@ pub fn skip_length_encoded_string(b: &[u8]) -> io::Result<usize> {
     // Get length
     let (num, _, mut n) = length_encoded_int(b);
     if num < 1 {
-        return Ok(n as usize);
+        return Ok(n);
     }
 
-    n += num as isize;
+    n += num as usize;
 
     // Check data length
-    if b.len() >= n as usize {
-        return Ok(n as usize);
+    if b.len() >= n {
+        return Ok(n);
     }
 
     Err(io::Error::new(io::ErrorKind::UnexpectedEof, "EOF"))

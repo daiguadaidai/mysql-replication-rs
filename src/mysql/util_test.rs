@@ -5,6 +5,27 @@ mod tests {
     use std::cmp::Ordering;
 
     #[test]
+    fn b() {
+        let a = -1_i8;
+        let b = a as i64;
+        let c = b as u64;
+        println!("{}, {}, {}", a, b, c);
+    }
+
+    #[test]
+    fn a() {
+        let f = 0.1_f64;
+        let i = f as u64;
+        println!("{}", f);
+        println!("{}", i);
+
+        let ii = f.to_bits();
+        println!("{}", ii);
+        let b = f64::from_bits(ii);
+        println!("{}", b);
+    }
+
+    #[test]
     fn test_compare_server_versions() -> Result<(), ReplicationError> {
         struct Case {
             pub a: String,
