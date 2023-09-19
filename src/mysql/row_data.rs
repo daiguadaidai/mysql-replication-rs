@@ -6,6 +6,7 @@ use crate::mysql::{
     UNSIGNED_FLAG,
 };
 
+#[derive(Debug, Default, Clone)]
 pub struct RowData(Vec<u8>);
 
 impl RowData {

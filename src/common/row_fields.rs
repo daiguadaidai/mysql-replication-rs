@@ -208,7 +208,7 @@ impl Display for JsonDiff {
 
 #[cfg(test)]
 mod tests {
-    use crate::replication::{DecodeDecimal, DecodeFieldData, DecodeJson};
+    use crate::common::row_fields::{DecodeDecimal, DecodeFieldData, DecodeJson};
     use bigdecimal::BigDecimal;
     use std::collections::HashMap;
     use std::str::FromStr;

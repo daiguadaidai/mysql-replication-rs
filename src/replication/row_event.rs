@@ -1,9 +1,9 @@
+use crate::common::row_fields::{
+    DecodeDatetime, DecodeFieldData, DecodeJson, JsonDiff, JsonDiffOperation,
+};
 use crate::error::ReplicationError;
 use crate::mysql::ParseBinary;
-use crate::replication::{
-    decode_helper, DecodeDatetime, DecodeFieldData, DecodeJson, Event, EventType, FracTime,
-    JsonBinaryDecoder, JsonDiff, JsonDiffOperation,
-};
+use crate::replication::{decode_helper, Event, EventType, FracTime, JsonBinaryDecoder};
 use crate::{mysql, replication, utils};
 use byteorder::{LittleEndian, ReadBytesExt};
 use chrono::{NaiveDate, NaiveDateTime};

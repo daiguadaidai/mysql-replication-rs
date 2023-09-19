@@ -167,7 +167,7 @@ pub struct FieldValue {
     pub string: Vec<u8>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FieldValueEnum {
     None,
     U64(u64),

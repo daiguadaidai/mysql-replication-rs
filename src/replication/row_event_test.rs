@@ -1,11 +1,9 @@
 #[cfg(test)]
 mod tests {
+    use crate::common::row_fields::{DecodeDatetime, DecodeDecimal, DecodeFieldData, DecodeJson};
     use crate::error::ReplicationError;
     use crate::mysql;
-    use crate::replication::{
-        decode_helper, DecodeDatetime, DecodeDecimal, DecodeFieldData, DecodeJson, Event,
-        RowsEvent, TableMapEvent,
-    };
+    use crate::replication::{decode_helper, Event, RowsEvent, TableMapEvent};
     use bigdecimal::BigDecimal;
     use std::collections::HashMap;
     use std::str::FromStr;

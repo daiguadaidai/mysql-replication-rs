@@ -1,6 +1,8 @@
 use crate::error::ReplicationError;
 use crate::mysql;
-use crate::replication::{self, DecodeDatetime, DecodeDecimal, FracTime};
+
+use crate::common::row_fields::{DecodeDatetime, DecodeDecimal};
+use crate::replication::{self, FracTime};
 use bigdecimal::BigDecimal;
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt};
 use chrono::{NaiveDate, NaiveDateTime};

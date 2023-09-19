@@ -1,8 +1,8 @@
+use crate::common::row_fields::{DecodeDatetime, DecodeDecimal, DecodeJson};
 use crate::error::ReplicationError;
 use crate::mysql;
 use crate::mysql::ParseBinary;
-use crate::replication::{decode_helper, DecodeDecimal};
-use crate::replication::{DecodeDatetime, DecodeJson};
+use crate::replication::decode_helper;
 use std::collections::HashMap;
 
 pub const JSONB_SMALL_OBJECT: u8 = 0; // small JSON object

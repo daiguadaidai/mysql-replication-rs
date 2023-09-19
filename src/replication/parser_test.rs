@@ -1,10 +1,10 @@
 #[cfg(test)]
 mod tests {
+    use crate::common::row_fields::{DecodeFieldData, DecodeJson};
     use crate::error::ReplicationError;
     use crate::replication::parser::BinlogParser;
     use crate::replication::{
-        DecodeFieldData, DecodeJson, EnumRowImageType, EventType, FormatDescriptionEvent,
-        RowsEvent, TableMapEvent,
+        EnumRowImageType, EventType, FormatDescriptionEvent, RowsEvent, TableMapEvent,
     };
     use std::io::BufReader;
     use std::rc::Rc;
