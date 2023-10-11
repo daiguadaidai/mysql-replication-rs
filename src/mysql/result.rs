@@ -1,7 +1,7 @@
 use crate::mysql::resultset::ResultSet;
 
 #[derive(Debug, Default, Clone)]
-pub struct Result {
+pub struct MysqlResult {
     pub status: u16,
     pub warnings: u16,
     pub insert_id: u64,
@@ -9,7 +9,7 @@ pub struct Result {
     pub result_set: Option<ResultSet>,
 }
 
-impl Result {
+impl MysqlResult {
     pub fn close(&mut self) {
         if !self.result_set.is_none() {
             self.result_set = None

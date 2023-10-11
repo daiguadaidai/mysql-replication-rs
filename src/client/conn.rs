@@ -1,16 +1,17 @@
 use crate::error::ReplicationError;
+use crate::mysql::result::MysqlResult;
 use crate::mysql::FieldValue;
 use std::collections::HashMap;
-use std::rc::Rc;
-use tokio::net;
+use std::net;
 
+#[derive(Debug, Default)]
 pub struct Conn {
-    _conn: net::TcpStream,
+    _conn: Option<net::TcpStream>,
 
     _user: String,
     _password: String,
     _db: String,
-    _tls_config: rustls::ClientConfig,
+    _tls_config: Option<rustls::ClientConfig>,
     _proto: String,
 
     _server_version: String,
@@ -27,16 +28,23 @@ pub struct Conn {
 }
 
 // This function will be called for every row in resultset from ExecuteSelectStreaming.
-pub type SelectPerRowCallback = Rc<dyn Fn(Vec<FieldValue>) -> Result<(), ReplicationError>>;
+pub type SelectPerRowCallback = dyn Fn(Vec<FieldValue>) -> Result<(), ReplicationError>;
 
 // This function will be called once per result from ExecuteSelectStreaming
-// pub type SelectPerResultCallback func(result *Result) error
-/*
-
+pub type SelectPerResultCallback = dyn Fn(&MysqlResult) -> Result<(), ReplicationError>;
 
 // This function will be called once per result from ExecuteMultiple
-type ExecPerResultCallback func(result *Result, err error)
+pub type ExecPerResultCallback = dyn Fn(&MysqlResult, Result<(), ReplicationError>);
 
+fn get_net_proto(addr: &str) -> String {
+    let mut proto = "tcp";
+    if proto.contains("/") {
+        proto = "unix";
+    }
+
+    proto.to_string()
+}
+/*
 func getNetProto(addr string) string {
     proto := "tcp"
     if strings.Contains(addr, "/") {
@@ -44,43 +52,65 @@ func getNetProto(addr string) string {
     }
     return proto
 }
+ */
 
 // Connect to a MySQL server, addr can be ip:port, or a unix socket domain like /var/sock.
 // Accepts a series of configuration functions as a variadic argument.
-func Connect(addr string, user string, password string, dbName string, options ...func(*Conn)) (*Conn, error) {
-    ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-    defer cancel()
+pub fn connect(
+    addr: &str,
+    user: &str,
+    password: &str,
+    db_name: &str,
+) -> Result<Conn, ReplicationError> {
+    /*
+       ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+       defer cancel()
 
-    dialer := &net.Dialer{}
+       dialer := &net.Dialer{}
 
-    return ConnectWithDialer(ctx, "", addr, user, password, dbName, dialer.DialContext, options...)
+       return ConnectWithDialer(ctx, "", addr, user, password, dbName, dialer.DialContext, options...)
+    */
+    Err(ReplicationError::new("".to_string()))
 }
 
 // Dialer connects to the address on the named network using the provided context.
-type Dialer func(ctx context.Context, network, address string) (net.Conn, error)
+pub type Dialer =
+    dyn Fn(tokio_context::context::Context, &str, &str) -> Result<net::TcpStream, ReplicationError>;
 
 // Connect to a MySQL server using the given Dialer.
+pub fn connect_with_dialer(
+    addr: &str,
+    user: &str,
+    password: &str,
+    db_name: &str,
+    options: &Vec<Box<dyn Fn(&Conn)>>,
+) -> Result<Conn, ReplicationError> {
+    let mut c = Conn::default();
+    c._attributes
+        .insert(String::from("_client_name"), String::from("rs_mysql"));
+    c._attributes
+        .insert(String::from("_os"), String::from(std::env::consts::OS));
+    c._attributes.insert(
+        String::from("_platform"),
+        String::from(std::env::consts::ARCH),
+    );
+    c._attributes.insert(
+        String::from("_runtime_version"),
+        rustc_version::version().unwrap().to_string(),
+    );
+
+    let proto = get_net_proto(addr);
+
+    let conn = net::TcpStream::connect(addr)?;
+    c._user = user.to_string();
+    c._password = password.to_string();
+    c._db = db_name.to_string();
+    c._proto = proto;
+
+    Ok(c)
+}
+/*
 func ConnectWithDialer(ctx context.Context, network string, addr string, user string, password string, dbName string, dialer Dialer, options ...func(*Conn)) (*Conn, error) {
-    c := new(Conn)
-
-    c.attributes = map[string]string{
-        "_client_name": "go-mysql",
-        // "_client_version": "0.1",
-        "_os":              runtime.GOOS,
-        "_platform":        runtime.GOARCH,
-        "_runtime_version": runtime.Version(),
-    }
-
-    if network == "" {
-        network = getNetProto(addr)
-    }
-
-    var err error
-    conn, err := dialer(ctx, network, addr)
-    if err != nil {
-        return nil, errors.Trace(err)
-    }
-
     c.user = user
     c.password = password
     c.db = dbName

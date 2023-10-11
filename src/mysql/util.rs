@@ -1,3 +1,4 @@
+use crate::error::ReplicationError;
 use backtrace::Backtrace;
 use byteorder::{LittleEndian, ReadBytesExt};
 use flate2::read::ZlibDecoder;
@@ -82,8 +83,9 @@ pub fn calc_caching_sha2_password(scramble: &[u8], password: &[u8]) -> Vec<u8> {
 pub fn encrypt_password(
     password: &str,
     seed: &[u8],
-    pub_key: &rsa::RsaPublicKey,
-) -> rsa::Result<Vec<u8>> {
+    pub_key: &openssl::pkey::PKey<openssl::pkey::Public>,
+) -> Result<Vec<u8>, ReplicationError> {
+    let rsa = pub_key.rsa()?;
     let mut plain = password.as_bytes().to_vec();
     plain.push(0);
 
@@ -92,9 +94,15 @@ pub fn encrypt_password(
         plain[i] ^= seed[j]
     }
 
-    let mut rng = OsRng;
-    let padding = Oaep::new::<sha1::Sha1>();
-    pub_key.encrypt(&mut rng, padding, &plain)
+    let sha1_digest = openssl::sha::sha1(&plain);
+    let mut encrypted_data = Vec::<u8>::new();
+    let _ = rsa.public_encrypt(
+        &sha1_digest,
+        &mut encrypted_data,
+        openssl::rsa::Padding::PKCS1_OAEP,
+    )?;
+
+    Ok(encrypted_data)
 }
 
 pub fn decompress_mariadb_data(data: &[u8]) -> io::Result<Vec<u8>> {

@@ -10,6 +10,7 @@ pub mod common;
 pub mod error;
 pub mod loggerop;
 pub mod mysql;
+pub mod packet;
 pub mod replication;
 pub mod utils;
 

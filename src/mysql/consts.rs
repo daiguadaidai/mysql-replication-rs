@@ -1,5 +1,5 @@
 pub const MIN_PPOTOCOL_VERSION: u8 = 10;
-pub const MAX_PAYLOAD_LEN: isize = (1_isize << 24) - 1;
+pub const MAX_PAYLOAD_LEN: usize = (1_usize << 24) - 1;
 pub const TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
 
 pub const OK_HEADER: u8 = 0x00;
